@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<div class="p-3 mb-2 bg-secondary text-white">
+
+  <head>
+    <meta charset="utf-8">
+    <title>CURD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script type="text/javascript" src="JS/jquery.js"></script>
+    <style>
+      th {
+        text-align: left;
+      }
+
+      #pesan {
+        color: black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card m-5">
+      <div class="card-body">
+        <h1 style="color:black">DATA BUKU</h1>
+        <table class="table table-striped" style="width:100% ">
+          <thead>
+            <th>Id Buku</th>
+            <th>Kode Buku</th>
+            <th>Judul Buku</th>
+            <th>Penulis Buku</th>
+            <th>Penerbit Buku</th>
+            <th>Tahun penerbit</th>
+            <th>Stok</th>
+            <th>Ubah data</th>
+            <th>Hapus Data</th>
+          </thead>
+          <tbody id="rowdata">
+          </tbody>
+        </table>
+        <div>
+          <h1 style="color:black">INPUT DATA BUKU</h1>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Id Buku</label>
+            <input type="text" class="form-control" name="idbuku">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Kode Buku</label>
+            <input type="text" class="form-control" name="kodebuku">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Judul Buku</label>
+            <input type="text" class="form-control" name="judulbuku">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Penulis Buku</label>
+            <input type="text" class="form-control" name="penulisbuku">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Penerbit Buku</label>
+            <input type="text" class="form-control" name="penerbitbuku">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Tahun Penerbit</label>
+            <input type="text" class="form-control" name="tahunpenerbit">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" style="color:black">Stok</label>
+            <input type="text" class="form-control" name="stok">
+          </div>
+          <td><button id="tomboltd" class="btn btn-primary" onclick="tambahdata()">Input Data</button></td>
+          <td><button id="tombolup" class="btn btn-danger" onclick="updatedata()">Update Data</button></td>
+          </tr>
+        </div>
+        <p id="pesan"></p>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      onload();
+
+      function updatedata() {
+        var idbuku = $("[name='idbuku']").val();
+        var kodebuku = $("[name='kodebuku']").val();
+        var judulbuku = $("[name='judulbuku']").val();
+        var penulisbuku = $("[name='penulisbuku']").val();
+        var penerbitbuku = $("[name='penerbitbuku']").val();
+        var tahunpenerbit = $("[name='tahunpenerbit']").val();
+        var stok = $("[name='stok']").val();
+
+        $.ajax({
+          type: "POST",
+          data: "idbuku=" + idbuku + "&kodebuku=" + kodebuku + "&judulbuku=" + judulbuku + "&penulisbuku=" + penulisbuku + "&penerbitbuku=" + penerbitbuku + "&tahunpenerbit=" + tahunpenerbit + "&stok=" + stok,
+          url: "updatedata.php",
+          success: function (result) {
+            var objresult = JSON.parse(result);
+            $("#pesan").html(objresult.pesan);
+
+            onload();
+          }
+        })
+      }
+
+      function pilihdata(idx) {
+        var id_buku = idx;
+        console.log(idx);
+        $.ajax({
+          type: "POST",
+          data: "id=" + id_buku,
+          url: "pickid.php",
+          success: function (result) {
+            var objresult = JSON.parse(result);
+            $("[name='idbuku']").val(objresult.id_buku);
+            $("[name='kodebuku']").val(objresult.kode_buku);
+            $("[name='judulbuku']").val(objresult.judul_buku);
+            $("[name='penulisbuku']").val(objresult.penulis_buku);
+            $("[name='penerbitbuku']").val(objresult.penerbit_buku);
+            $("[name='tahunpenerbit']").val(objresult.tahun_penerbit);
+            $("[name='stok']").val(objresult.stok);
+
+            $("#tomboltd").hide();
+            $("#tombolup").show();
+          }
+        })
+      }
+
+      function tambahdata() {
+        var idbuku = $("[name='idbuku']").val();
+        var kodebuku = $("[name='kodebuku']").val();
+        var judulbuku = $("[name='judulbuku']").val();
+        var penulisbuku = $("[name='penulisbuku']").val();
+        var penerbitbuku = $("[name='penerbitbuku']").val();
+        var tahunpenerbit = $("[name='tahunpenerbit']").val();
+        var stok = $("[name='stok']").val();
+
+
+        $.ajax({
+          type: "POST",
+          data: "idbuku=" + idbuku + "&kodebuku=" + kodebuku + "&judulbuku=" + judulbuku + "&penulisbuku=" + penulisbuku + "&penerbitbuku=" + penerbitbuku + "&tahunpenerbit=" + tahunpenerbit + "&stok=" + stok,
+          url: "addata.php",
+          success: function (result) {
+            var objresult = JSON.parse(result);
+            $("#pesan").html(objresult.pesan);
+
+            onload();
+          }
+        })
+      }
+
+
+      function hapusdata(idd) {
+        var tanya = confirm("Apakah anda yakin akan menghapus data?")
+        var id_buku = idd;
+        if (tanya) {
+          $.ajax({
+            type: 'POST',
+            data: 'id=' + id_buku,
+            url: 'deletedata.php',
+            success: function ($result) {
+
+              onload();
+            }
+          })
+        }
+      }
+
+      function onload() {
+        var datahandler = $("#rowdata");
+        datahandler.html("");
+        $.ajax({
+          type: "GET",
+          data: "",
+          url: "pickdata.php",
+          success: function (result) {
+            var objresult = JSON.parse(result);
+            $.each(objresult, function (key, val) {
+              var newrow = $("<tr>")
+              newrow.html("<td>" + val.id_buku + "</td><td>" + val.kode_buku + "</td><td>" + val.judul_buku + "</td><td>"
+                + val.penulis_buku + "</td><td>" + val.penerbit_buku + "</td><td>" + val.tahun_penerbit + "</td><td>" + val.stok +
+                "</td><td><button class='btn btn-primary' onclick='pilihdata(" + val.id_buku + ")'>Ubah</button></td><td><button class='btn btn-danger' onclick='hapusdata(" + val.id_buku + ")'>Hapus</button></td>");
+              datahandler.append(newrow);
+              $("#tombolup").hide();
+            })
+          }
+        })
+      }
+    </script>
+  </body>
+</div>
+
+</html>
